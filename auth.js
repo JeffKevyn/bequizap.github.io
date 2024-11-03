@@ -1,11 +1,13 @@
 // Sistema simples de autenticação
 const AUTH = {
     // Registra usuário
-    async register(username, password, name, email) {
+    async register(username, name, email, password) {
         try {
             // Verifica se username já existe
-            const userSnapshot = await db.ref(`users/${username}`).once('value');
-            if (userSnapshot.exists()) {
+            const userRef = db.ref(`users/${username}`);
+            const snapshot = await userRef.once('value');
+            
+            if (snapshot.exists()) {
                 return { error: 'Nome de usuário já existe' };
             }
 
@@ -16,15 +18,16 @@ const AUTH = {
                 email,
                 password, // Em produção, use hash!
                 profilePic: '/images/default-avatar.png',
-                coverPhoto: '/images/default-cover.png',
                 bio: '',
-                location: '',
                 joinDate: new Date().toISOString(),
-                following: {},
-                followers: {}
+                followers: {},
+                following: {}
             };
 
-            await db.ref(`users/${username}`).set(newUser);
+            await userRef.set(newUser);
+            
+            // Já loga o usuário
+            localStorage.setItem('currentUser', JSON.stringify(newUser));
             return { success: true };
         } catch (error) {
             return { error: error.message };
@@ -38,11 +41,7 @@ const AUTH = {
             const user = snapshot.val();
 
             if (user && user.password === password) {
-                localStorage.setItem('currentUser', JSON.stringify({
-                    username,
-                    name: user.name,
-                    profilePic: user.profilePic
-                }));
+                localStorage.setItem('currentUser', JSON.stringify(user));
                 return { success: true };
             }
             return { error: 'Usuário ou senha incorretos' };

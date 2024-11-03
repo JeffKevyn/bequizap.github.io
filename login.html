@@ -1,52 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login</title>
+    <title>Login - Twitter Clone</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-box">
-            <h2>Login</h2>
-            
-            <form id="loginForm">
+    <div class="auth-container">
+        <div class="auth-box">
+            <div class="auth-logo">
+                <i class="fab fa-twitter"></i>
+            </div>
+            <form id="loginForm" class="auth-form">
                 <div class="form-group">
                     <input type="text" id="username" placeholder="Nome de usuário" required>
                 </div>
                 <div class="form-group">
                     <input type="password" id="password" placeholder="Senha" required>
                 </div>
-                <button type="submit">Entrar</button>
+                <button type="submit" class="auth-btn">Entrar</button>
             </form>
-
-            <p>Não tem conta? <a href="register.html">Crie uma conta</a></p>
+            <div class="auth-footer">
+                Não tem uma conta? <a href="register.html">Cadastre-se</a>
+            </div>
         </div>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="auth.js"></script>
     <script>
-        document.getElementById('loginForm').onsubmit = function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-
-            // Pega lista de usuários
-            const users = JSON.parse(localStorage.getItem('users')) || {};
-
-            // Verifica se usuário existe e senha está correta
-            if(users[username] && users[username].password === password) {
-                // Salva usuário logado
-                localStorage.setItem('currentUser', JSON.stringify({
-                    username: username,
-                    name: users[username].name,
-                    email: users[username].email
-                }));
-
-                // Vai para página principal
-                window.location.href = 'index.html';
+            
+            const result = await AUTH.login(username, password);
+            if (result.success) {
+                window.location.href = '/';
             } else {
-                alert('Usuário ou senha incorretos!');
+                alert(result.error);
             }
-        };
+        });
     </script>
 </body>
 </html> 
