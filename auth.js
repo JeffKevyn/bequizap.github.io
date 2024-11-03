@@ -3,26 +3,31 @@ const AUTH = {
     // Registra usuário
     async register(username, password, name, email) {
         try {
-            const usersRef = db.ref('users');
-            const snapshot = await usersRef.child(username).once('value');
-            
-            if (snapshot.exists()) {
-                return { error: 'Usuário já existe' };
+            // Verifica se username já existe
+            const userSnapshot = await db.ref(`users/${username}`).once('value');
+            if (userSnapshot.exists()) {
+                return { error: 'Nome de usuário já existe' };
             }
 
-            await usersRef.child(username).set({
-                password, // Em produção, use hash!
+            // Cria novo usuário
+            const newUser = {
+                username,
                 name,
                 email,
-                profilePic: 'placeholder.jpg',
-                coverPhoto: '',
-                bio: 'Olá! Estou no Twitter!',
-                location: ''
-            });
+                password, // Em produção, use hash!
+                profilePic: '/images/default-avatar.png',
+                coverPhoto: '/images/default-cover.png',
+                bio: '',
+                location: '',
+                joinDate: new Date().toISOString(),
+                following: {},
+                followers: {}
+            };
 
+            await db.ref(`users/${username}`).set(newUser);
             return { success: true };
         } catch (error) {
-            return { error: 'Erro ao registrar usuário' };
+            return { error: error.message };
         }
     },
 
@@ -33,36 +38,28 @@ const AUTH = {
             const user = snapshot.val();
 
             if (user && user.password === password) {
-                const userData = {
+                localStorage.setItem('currentUser', JSON.stringify({
                     username,
                     name: user.name,
-                    email: user.email,
-                    profilePic: user.profilePic,
-                    coverPhoto: user.coverPhoto,
-                    bio: user.bio,
-                    location: user.location,
-                    verified: isUserVerified(username)
-                };
-
-                localStorage.setItem('currentUser', JSON.stringify(userData));
+                    profilePic: user.profilePic
+                }));
                 return { success: true };
             }
-
             return { error: 'Usuário ou senha incorretos' };
         } catch (error) {
-            return { error: 'Erro ao fazer login' };
+            return { error: error.message };
         }
     },
 
     // Faz logout
     logout() {
         localStorage.removeItem('currentUser');
-        window.location.href = 'login.html';
+        window.location.href = '/login.html';
     },
 
     // Verifica se está logado
     isLoggedIn() {
-        return localStorage.getItem('currentUser') !== null;
+        return !!this.getCurrentUser();
     },
 
     // Pega usuário atual

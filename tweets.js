@@ -1,72 +1,101 @@
 const TWEETS = {
-    // Pega todos os tweets
-    getAllTweets(callback) {
-        db.ref('tweets').on('value', (snapshot) => {
-            const tweets = [];
-            if (snapshot.exists()) {
-                snapshot.forEach((child) => {
-                    tweets.unshift({...child.val(), id: child.key});
-                });
-            }
-            callback(tweets);
-        });
-    },
+    async post(content) {
+        const user = AUTH.getCurrentUser();
+        if (!user) return null;
 
-    // Adiciona novo tweet
-    async addTweet(tweet) {
-        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        if (!currentUser) return null;
-        
         const newTweet = {
-            content: tweet,
-            author: {
-                username: currentUser.username,
-                name: currentUser.name
-            },
-            likes: 0,
-            timestamp: new Date().toISOString(),
-            likedBy: []
+            authorId: user.username,
+            content,
+            timestamp: firebase.database.ServerValue.TIMESTAMP,
+            likes: {},
+            retweets: {},
+            replies: {}
         };
 
-        try {
-            const ref = await db.ref('tweets').push(newTweet);
-            return {...newTweet, id: ref.key};
-        } catch (error) {
-            console.error('Erro ao adicionar tweet:', error);
-            return null;
+        const tweetRef = await db.ref('tweets').push(newTweet);
+        return tweetRef.key;
+    },
+
+    async like(tweetId) {
+        const user = AUTH.getCurrentUser();
+        if (!user) return;
+
+        const likeRef = db.ref(`tweets/${tweetId}/likes/${user.username}`);
+        const snapshot = await likeRef.once('value');
+
+        if (snapshot.exists()) {
+            await likeRef.remove();
+            return false;
+        } else {
+            await likeRef.set(true);
+            this.createNotification(tweetId, 'like');
+            return true;
         }
     },
 
-    // Curte/Descurte tweet
-    async toggleLike(tweetId) {
-        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        if (!currentUser) return null;
+    async retweet(tweetId) {
+        const user = AUTH.getCurrentUser();
+        if (!user) return;
 
-        const tweetRef = db.ref(`tweets/${tweetId}`);
-        
-        try {
-            const snapshot = await tweetRef.once('value');
-            const tweet = snapshot.val();
+        const retweetRef = db.ref(`tweets/${tweetId}/retweets/${user.username}`);
+        const snapshot = await retweetRef.once('value');
 
-            if (!tweet) return null;
-
-            const likedBy = tweet.likedBy || [];
-            const userIndex = likedBy.indexOf(currentUser.username);
-
-            if (userIndex === -1) {
-                likedBy.push(currentUser.username);
-                tweet.likes = (tweet.likes || 0) + 1;
-            } else {
-                likedBy.splice(userIndex, 1);
-                tweet.likes = Math.max(0, (tweet.likes || 0) - 1);
-            }
-
-            tweet.likedBy = likedBy;
-            await tweetRef.update(tweet);
-            return {...tweet, id: tweetId};
-        } catch (error) {
-            console.error('Erro ao atualizar like:', error);
-            return null;
+        if (snapshot.exists()) {
+            await retweetRef.remove();
+            return false;
+        } else {
+            await retweetRef.set(true);
+            this.createNotification(tweetId, 'retweet');
+            return true;
         }
+    },
+
+    async reply(tweetId, content) {
+        const user = AUTH.getCurrentUser();
+        if (!user) return;
+
+        const reply = {
+            authorId: user.username,
+            content,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+        };
+
+        const replyRef = await db.ref(`tweets/${tweetId}/replies`).push(reply);
+        this.createNotification(tweetId, 'reply');
+        return replyRef.key;
+    },
+
+    async createNotification(tweetId, type) {
+        const user = AUTH.getCurrentUser();
+        const tweet = await db.ref(`tweets/${tweetId}`).once('value');
+        const tweetData = tweet.val();
+
+        if (user.username === tweetData.authorId) return;
+
+        const notification = {
+            type,
+            from: user.username,
+            tweetId,
+            timestamp: firebase.database.ServerValue.TIMESTAMP,
+            read: false
+        };
+
+        await db.ref(`notifications/${tweetData.authorId}`).push(notification);
+    },
+
+    listenToFeed(callback) {
+        db.ref('tweets')
+            .orderByChild('timestamp')
+            .limitToLast(50)
+            .on('value', snapshot => {
+                const tweets = [];
+                snapshot.forEach(child => {
+                    tweets.unshift({
+                        id: child.key,
+                        ...child.val()
+                    });
+                });
+                callback(tweets);
+            });
     }
 }; 
