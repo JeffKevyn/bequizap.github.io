@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <h2>Login</h2>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <input type="text" id="username" placeholder="Nome de usuário" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" placeholder="Senha" required>
+                </div>
+                <button type="submit">Entrar</button>
+            </form>
+
+            <p>Não tem conta? <a href="register.html">Crie uma conta</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').onsubmit = function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Pega lista de usuários
+            const users = JSON.parse(localStorage.getItem('users')) || {};
+
+            // Verifica se usuário existe e senha está correta
+            if(users[username] && users[username].password === password) {
+                // Salva usuário logado
+                localStorage.setItem('currentUser', JSON.stringify({
+                    username: username,
+                    name: users[username].name,
+                    email: users[username].email
+                }));
+
+                // Vai para página principal
+                window.location.href = 'index.html';
+            } else {
+                alert('Usuário ou senha incorretos!');
+            }
+        };
+    </script>
+</body>
+</html> 

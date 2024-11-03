@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil - Clone do Twitter</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar (mesmo do index.html) -->
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fab fa-twitter"></i>
+            </div>
+            <nav>
+                <a href="index.html"><i class="fas fa-home"></i> Página Inicial</a>
+                <a href="#"><i class="fas fa-hashtag"></i> Explorar</a>
+                <a href="#"><i class="far fa-bell"></i> Notificações</a>
+                <a href="#"><i class="far fa-envelope"></i> Mensagens</a>
+                <a href="#"><i class="far fa-bookmark"></i> Itens Salvos</a>
+                <a href="profile.html" class="active"><i class="far fa-user"></i> Perfil</a>
+            </nav>
+            <button class="tweet-btn">Tweetar</button>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Cabeçalho do Perfil -->
+            <div class="profile-header">
+                <div class="cover-photo">
+                    <label for="cover-upload" class="edit-cover">
+                        <i class="fas fa-camera"></i>
+                    </label>
+                    <input type="file" id="cover-upload" hidden accept="image/*">
+                </div>
+                
+                <div class="profile-info">
+                    <div class="profile-photo">
+                        <label for="photo-upload" class="edit-photo">
+                            <img src="https://via.placeholder.com/150" alt="Profile" class="profile-pic" id="profile-pic">
+                            <div class="edit-overlay">
+                                <i class="fas fa-camera"></i>
+                            </div>
+                        </label>
+                        <input type="file" id="photo-upload" accept="image/*">
+                    </div>
+                    
+                    <button class="edit-profile-btn">Editar perfil</button>
+                </div>
+
+                <div class="profile-details">
+                    <div class="profile-name-container">
+                        <span class="profile-name">Nome do Usuário</span>
+                        <span class="verified-badge" id="verified-badge" style="display: none;">
+                            <i class="fas fa-check-circle"></i>
+                        </span>
+                    </div>
+                    <span class="profile-username">@usuario</span>
+                    <p class="profile-bio">Sua bio aparecerá aqui</p>
+                    <div class="profile-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> Localização</span>
+                        <span><i class="fas fa-calendar-alt"></i> Entrou em janeiro de 2024</span>
+                    </div>
+                    <div class="profile-stats">
+                        <span><strong>0</strong> Seguindo</span>
+                        <span><strong>0</strong> Seguidores</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feed do Perfil -->
+            <div class="profile-feed">
+                <!-- Os tweets do usuário aparecerão aqui -->
+            </div>
+        </main>
+
+        <!-- Trending Section (mesmo do index.html) -->
+        <div class="trending">
+            <!-- ... código existente ... -->
+        </div>
+    </div>
+
+    <!-- Modal de Edição -->
+    <div class="edit-modal" id="editModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Editar Perfil</h2>
+            <form id="edit-profile-form">
+                <!-- Seção de banner -->
+                <div class="form-group">
+                    <label>Banner</label>
+                    <div class="image-upload-container">
+                        <div id="banner-preview" class="banner-preview"></div>
+                        <input type="file" id="banner-upload" accept="image/*">
+                        <label for="banner-upload" class="upload-button">
+                            <i class="fas fa-camera"></i> Alterar banner
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Seção de foto de perfil -->
+                <div class="form-group">
+                    <label>Foto do Perfil</label>
+                    <div class="image-upload-container">
+                        <img src="https://via.placeholder.com/150" alt="Preview" id="profile-preview" class="preview-image">
+                        <input type="file" id="photo-upload" accept="image/*">
+                        <label for="photo-upload" class="upload-button">
+                            <i class="fas fa-camera"></i> Alterar foto
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Campos do perfil -->
+                <div class="form-group">
+                    <label for="edit-name">Nome</label>
+                    <input type="text" id="edit-name" maxlength="50">
+                </div>
+                <div class="form-group">
+                    <label for="edit-username">Nome de usuário</label>
+                    <input type="text" id="edit-username" maxlength="15">
+                </div>
+                <div class="form-group">
+                    <label for="edit-bio">Bio</label>
+                    <textarea id="edit-bio" maxlength="160"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="edit-location">Localização</label>
+                    <input type="text" id="edit-location" maxlength="30">
+                </div>
+
+                <!-- Checkbox de verificação -->
+                <div class="form-group">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="verified-checkbox">
+                        <span class="checkmark"></span>
+                        Conta Verificada
+                    </label>
+                </div>
+
+                <button type="submit" class="save-btn">Salvar</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="verified-users.js"></script>
+    <script src="profile.js"></script>
+</body>
+</html> 

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clone do Twitter</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <script src="auth.js"></script>
+    <script>
+        // Verifica se está logado
+        if (!AUTH.isLoggedIn()) {
+            window.location.href = 'login.html';
+        }
+    </script>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fab fa-twitter"></i>
+            </div>
+            <nav>
+                <a href="#"><i class="fas fa-home"></i> Página Inicial</a>
+                <a href="#"><i class="fas fa-hashtag"></i> Explorar</a>
+                <a href="#"><i class="far fa-bell"></i> Notificações</a>
+                <a href="#"><i class="far fa-envelope"></i> Mensagens</a>
+                <a href="#"><i class="far fa-bookmark"></i> Itens Salvos</a>
+                <a href="profile.html"><i class="far fa-user"></i> Perfil</a>
+            </nav>
+            <button class="tweet-btn">Tweetar</button>
+            <button onclick="AUTH.logout()" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </button>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="tweet-box">
+                <img src="https://via.placeholder.com/50" alt="Profile" class="profile-pic">
+                <div class="tweet-input">
+                    <textarea placeholder="O que está acontecendo?"></textarea>
+                    <div class="tweet-actions">
+                        <div class="tweet-icons">
+                            <i class="far fa-image"></i>
+                            <i class="fas fa-poll"></i>
+                            <i class="far fa-smile"></i>
+                            <i class="far fa-calendar"></i>
+                        </div>
+                        <button>Tweetar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feed -->
+            <div class="feed">
+                <div class="tweet">
+                    <img src="https://via.placeholder.com/50" alt="Profile" class="profile-pic">
+                    <div class="tweet-content">
+                        <div class="tweet-header">
+                            <span class="name">Nome do Usuário</span>
+                            <span class="username">@usuario</span>
+                            <span class="timestamp">· 1h</span>
+                        </div>
+                        <p class="tweet-text">Este é um exemplo de tweet!</p>
+                        <div class="tweet-actions">
+                            <span><i class="far fa-comment"></i> 5</span>
+                            <span><i class="fas fa-retweet"></i> 2</span>
+                            <span><i class="far fa-heart"></i> 10</span>
+                            <span><i class="far fa-share-square"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Trending Section -->
+        <div class="trending">
+            <div class="search">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Buscar no Twitter">
+            </div>
+            <div class="trends">
+                <h2>O que está acontecendo</h2>
+                <div class="trend-item">
+                    <span class="category">Assuntos do Momento</span>
+                    <span class="trend-name">#Trending1</span>
+                    <span class="tweets-count">50.5K Tweets</span>
+                </div>
+                <!-- Mais itens de tendência aqui -->
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
