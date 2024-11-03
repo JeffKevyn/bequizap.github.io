@@ -1,3 +1,4 @@
+/* Reset e estilos gerais */
 * {
     margin: 0;
     padding: 0;
@@ -10,55 +11,17 @@ body {
     color: white;
 }
 
+/* Container principal */
 .container {
     display: grid;
     grid-template-columns: 275px auto 350px;
     min-height: 100vh;
 }
 
-/* Sidebar */
-.sidebar {
-    padding: 20px;
-    border-right: 1px solid #38444d;
-}
-
-.logo i {
-    font-size: 2em;
-    color: #1da1f2;
-}
-
-.sidebar nav {
-    margin-top: 20px;
-}
-
-.sidebar nav a {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    color: white;
-    text-decoration: none;
-    font-size: 1.2em;
-    margin: 5px 0;
-}
-
-.sidebar nav a i {
-    margin-right: 15px;
-}
-
-.tweet-btn {
-    background-color: #1da1f2;
-    color: white;
-    border: none;
-    border-radius: 30px;
-    padding: 15px 80px;
-    font-size: 1.1em;
-    margin-top: 20px;
-    cursor: pointer;
-}
-
-/* Main Content */
+/* Área de tweets */
 .main-content {
     border-right: 1px solid #38444d;
+    border-left: 1px solid #38444d;
 }
 
 .tweet-box {
@@ -90,6 +53,10 @@ body {
     max-height: 200px;
 }
 
+.tweet-input textarea:focus {
+    outline: none;
+}
+
 .tweet-actions {
     display: flex;
     justify-content: space-between;
@@ -103,123 +70,114 @@ body {
     cursor: pointer;
 }
 
-/* Feed */
+.tweet-btn {
+    background-color: #1da1f2;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.tweet-btn:hover {
+    background-color: #1a91da;
+}
+
+/* Tweets no feed */
 .tweet {
-    display: flex;
     padding: 15px;
     border-bottom: 1px solid #38444d;
+    display: flex;
 }
 
 .tweet-content {
     flex: 1;
+    margin-left: 10px;
 }
 
-.tweet-header span {
-    margin-right: 5px;
+.tweet-header {
+    margin-bottom: 5px;
 }
 
-.username, .timestamp {
+.tweet-header .name {
+    font-weight: bold;
+}
+
+.tweet-header .username,
+.tweet-header .timestamp {
     color: #8899a6;
+    margin-left: 5px;
+    font-size: 0.9em;
 }
 
 .tweet-text {
     margin: 10px 0;
+    line-height: 1.4;
 }
 
-/* Trending Section */
-.trending {
-    padding: 20px;
+/* Ações do tweet (likes, etc) */
+.tweet-actions {
+    display: flex;
+    gap: 20px;
+    color: #8899a6;
 }
 
-.search {
-    background-color: #253341;
-    border-radius: 30px;
-    padding: 10px 20px;
+.like-btn {
+    cursor: pointer;
+    transition: all 0.2s;
     display: flex;
     align-items: center;
+    gap: 5px;
 }
 
-.search input {
-    background: transparent;
-    border: none;
-    color: white;
-    margin-left: 10px;
-    width: 100%;
-}
-
-.trends {
-    background-color: #192734;
-    border-radius: 15px;
-    margin-top: 20px;
-    padding: 15px;
-}
-
-.trend-item {
-    padding: 15px 0;
-    border-bottom: 1px solid #38444d;
-}
-
-.category, .tweets-count {
-    color: #8899a6;
-    font-size: 0.9em;
-}
-
-.trend-name {
-    display: block;
-    font-weight: bold;
-    margin: 5px 0;
-}
-
-.fa-heart.fas {
+.like-btn:hover {
     color: #e0245e;
 }
 
-.tweet-actions span {
-    cursor: pointer;
+.like-btn.liked {
+    color: #e0245e;
 }
 
-.tweet-actions span:hover {
-    color: #1da1f2;
+.like-btn.liked i {
+    color: #e0245e;
 }
 
-/* Adicione ao seu arquivo CSS existente */
-.sidebar nav a.active {
-    color: #1da1f2;
-    font-weight: bold;
-}
-
-.sidebar nav a:hover {
-    background-color: rgba(29, 161, 242, 0.1);
-    border-radius: 30px;
-}
-
-/* Estilos para o login */
+/* Login e Registro */
 .login-container {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #15202b;
+    padding: 20px;
+    background: linear-gradient(135deg, #15202b 0%, #192734 100%);
 }
 
 .login-box {
     background-color: #192734;
-    padding: 30px;
-    border-radius: 15px;
+    padding: 40px;
+    border-radius: 20px;
     width: 100%;
     max-width: 400px;
-    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
-.login-box i {
+.logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo i {
     color: #1DA1F2;
     font-size: 40px;
-    margin-bottom: 20px;
 }
 
-.login-box h2 {
+h2 {
     color: white;
+    text-align: center;
     margin-bottom: 30px;
+    font-size: 24px;
 }
 
 .form-group {
@@ -228,25 +186,39 @@ body {
 
 .form-group input {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #38444d;
+    padding: 15px;
+    border: 2px solid #38444d;
     background-color: #253341;
     color: white;
-    border-radius: 5px;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: all 0.3s ease;
 }
 
-.login-box button {
+.form-group input:focus {
+    border-color: #1DA1F2;
+    outline: none;
+}
+
+button {
     width: 100%;
-    padding: 12px;
+    padding: 15px;
     background-color: #1DA1F2;
     color: white;
     border: none;
-    border-radius: 25px;
-    cursor: pointer;
+    border-radius: 30px;
+    font-size: 16px;
     font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #1a91da;
 }
 
 .login-footer {
+    text-align: center;
     margin-top: 20px;
     color: #8899A6;
 }
@@ -254,4 +226,17 @@ body {
 .login-footer a {
     color: #1DA1F2;
     text-decoration: none;
-} 
+    font-weight: bold;
+}
+
+.login-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Mensagens de erro */
+.error-message {
+    color: #ff4d4d;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+}
