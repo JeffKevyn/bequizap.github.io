@@ -1,35 +1,32 @@
 // Tipos de verificação e suas cores
 const VERIFICATION_TYPES = {
     DEVELOPER: {
-        color: '#00BA7C', // Verde
-        title: 'DESENVOLVEDOR'
+        color: '#00BA7C',
+        title: 'Desenvolvedor Oficial'
     },
     BEQUINHOS: {
-        color: '#FFD700', // Dourado
-        title: 'BEQUINHOS'
+        color: '#FFD700',
+        title: 'Bequinho'
     },
     AMIGOS: {
-        color: '#1DA1F2', // Azul
-        title: 'AMIGOS'
+        color: '#1DA1F2',
+        title: 'Amigo'
     }
 };
 
-// Lista de usuários verificados com seus tipos
+// Lista de usuários verificados
 const verifiedUsers = {
-    'jeffin1': {
-        reason: 'DEVELOPER',
-        verifiedDate: '2024-01-15',
-        title: 'Desenvolvedor Oficial'
-    },
     'jeffin': {
-        reason: 'BEQUINHOS',
-        verifiedDate: '2024-01-16',
-        title: 'Bequinho'
+        type: 'DEVELOPER',
+        verifiedDate: '2024-01-15'
     },
-    'jeffin2': {
-        reason: 'AMIGOS',
-        verifiedDate: '2024-01-17',
-        title: 'Amigo'
+    'maria': {
+        type: 'BEQUINHOS',
+        verifiedDate: '2024-01-16'
+    },
+    'joao': {
+        type: 'AMIGOS',
+        verifiedDate: '2024-01-17'
     }
 };
 
@@ -40,13 +37,12 @@ function isUserVerified(username) {
 
 // Função para obter informações de verificação
 function getVerificationInfo(username) {
-    const userInfo = verifiedUsers[username.toLowerCase()];
-    if (!userInfo) return null;
+    const userVerification = verifiedUsers[username.toLowerCase()];
+    if (!userVerification) return null;
 
-    const type = VERIFICATION_TYPES[userInfo.reason];
+    const type = VERIFICATION_TYPES[userVerification.type];
     return {
-        ...userInfo,
-        color: type.color,
-        title: type.title
+        ...type,
+        date: userVerification.verifiedDate
     };
 } 

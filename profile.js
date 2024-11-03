@@ -196,3 +196,44 @@ function updateProfileInTweets() {
         }
     });
 }
+
+const PROFILE = {
+    // Carrega perfil
+    async loadProfile(username) {
+        try {
+            const snapshot = await db.ref(`users/${username}`).once('value');
+            const profile = snapshot.val();
+            
+            if (!profile) return null;
+
+            const verificationInfo = getVerificationInfo(username);
+            
+            return {
+                ...profile,
+                username,
+                verified: !!verificationInfo,
+                verificationInfo
+            };
+        } catch (error) {
+            console.error('Erro ao carregar perfil:', error);
+            return null;
+        }
+    },
+
+    // Atualiza perfil
+    async updateProfile(username, updates) {
+        try {
+            await db.ref(`users/${username}`).update(updates);
+            
+            // Atualiza usuário local
+            const currentUser = AUTH.getCurrentUser();
+            const updatedUser = {...currentUser, ...updates};
+            localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+
+            return true;
+        } catch (error) {
+            console.error('Erro ao atualizar perfil:', error);
+            return false;
+        }
+    }
+};

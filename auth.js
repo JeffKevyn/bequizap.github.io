@@ -1,36 +1,57 @@
 // Sistema simples de autenticação
 const AUTH = {
-    // Usuários cadastrados
-    users: {
-        'admin': {
-            password: 'admin123',
-            name: 'Administrador',
-            email: 'admin@email.com'
-        },
-        'jeffin': {
-            password: '123456',
-            name: 'Jefferson',
-            email: 'jeff@email.com'
-        }
-    },
+    // Registra usuário
+    async register(username, password, name, email) {
+        try {
+            const usersRef = db.ref('users');
+            const snapshot = await usersRef.child(username).once('value');
+            
+            if (snapshot.exists()) {
+                return { error: 'Usuário já existe' };
+            }
 
-    // Verifica se está logado
-    isLoggedIn() {
-        return localStorage.getItem('currentUser') !== null;
+            await usersRef.child(username).set({
+                password, // Em produção, use hash!
+                name,
+                email,
+                profilePic: 'placeholder.jpg',
+                coverPhoto: '',
+                bio: 'Olá! Estou no Twitter!',
+                location: ''
+            });
+
+            return { success: true };
+        } catch (error) {
+            return { error: 'Erro ao registrar usuário' };
+        }
     },
 
     // Faz login
-    login(username, password) {
-        const user = this.users[username];
-        if (user && user.password === password) {
-            localStorage.setItem('currentUser', JSON.stringify({
-                username,
-                name: user.name,
-                email: user.email
-            }));
-            return true;
+    async login(username, password) {
+        try {
+            const snapshot = await db.ref(`users/${username}`).once('value');
+            const user = snapshot.val();
+
+            if (user && user.password === password) {
+                const userData = {
+                    username,
+                    name: user.name,
+                    email: user.email,
+                    profilePic: user.profilePic,
+                    coverPhoto: user.coverPhoto,
+                    bio: user.bio,
+                    location: user.location,
+                    verified: isUserVerified(username)
+                };
+
+                localStorage.setItem('currentUser', JSON.stringify(userData));
+                return { success: true };
+            }
+
+            return { error: 'Usuário ou senha incorretos' };
+        } catch (error) {
+            return { error: 'Erro ao fazer login' };
         }
-        return false;
     },
 
     // Faz logout
@@ -39,19 +60,9 @@ const AUTH = {
         window.location.href = 'login.html';
     },
 
-    // Registra novo usuário
-    register(username, password, name, email) {
-        if (this.users[username]) {
-            return false; // Usuário já existe
-        }
-
-        this.users[username] = {
-            password,
-            name,
-            email
-        };
-
-        return true;
+    // Verifica se está logado
+    isLoggedIn() {
+        return localStorage.getItem('currentUser') !== null;
     },
 
     // Pega usuário atual

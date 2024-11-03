@@ -6,24 +6,26 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-    <!-- Área de tweets -->
-    <div class="main-content">
-        <div class="tweet-box">
-            <img src="placeholder.jpg" alt="Profile" class="profile-pic">
-            <div class="tweet-input">
-                <textarea id="tweetText" placeholder="O que está acontecendo?"></textarea>
-                <div class="tweet-actions">
-                    <div class="tweet-icons">
-                        <i class="far fa-image"></i>
-                        <i class="far fa-smile"></i>
-                    </div>
-                    <button onclick="postTweet()" class="tweet-btn">Tweetar</button>
-                </div>
-            </div>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- ... seu código da sidebar ... -->
         </div>
 
-        <div id="tweet-feed">
-            <!-- Tweets serão inseridos aqui -->
+        <!-- Conteúdo principal -->
+        <div class="main-content">
+            <!-- Área de tweet -->
+            <div class="tweet-box">
+                <!-- ... seu código do tweet box ... -->
+            </div>
+
+            <!-- Feed de tweets -->
+            <div id="tweet-feed"></div>
+        </div>
+
+        <!-- Sidebar direita -->
+        <div class="right-sidebar">
+            <!-- ... seu código da sidebar direita ... -->
         </div>
     </div>
 
@@ -31,6 +33,9 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     <script src="firebase-config.js"></script>
+    <script src="verified-users.js"></script>
+    <script src="auth.js"></script>
+    <script src="profile.js"></script>
     <script src="tweets.js"></script>
     <script src="app.js"></script>
 </body>
